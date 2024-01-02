@@ -1,23 +1,33 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import model.entities.Cards;
+import table.Opponent;
+import table.Player;
+import truco.Cards;
 
 public class Program {
 
 	public static void main(String[] args) {
+		
+		Cards cards = new Cards();
+		Player player = new Player();
+		Player opponent = new Opponent();
 
-		List<Cards> DeckCards = new ArrayList<>();
+		cards.addToDeck();
+		cards.shuffleCards();
 
-		for (int i = 1; i<=10;i++) {
-			for (int j = 1; j<=4;j++) {
-				DeckCards.add(new Cards (i, j));
-			}
+		System.out.println(cards.getDeckOfCards().size());
+		
+		cards.giveCards(player.getHand());
+		cards.giveCards(opponent.getHand());
+		
+		for (Cards x : player.getHand()) {
+			System.out.println(x);
 		}
-
-		DeckCards.forEach(System.out::println);
+		for (Cards x : opponent.getHand()) {
+			System.out.println(x);
+		}
+		
+		System.out.println(cards.getDeckOfCards().size());
 	}
 
 }
