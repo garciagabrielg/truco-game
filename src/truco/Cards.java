@@ -3,7 +3,7 @@ package truco;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.IntStream;
 
 public class Cards {
 	
@@ -19,7 +19,9 @@ public class Cards {
 		this.shape = shape;
 	}
 
-	public Cards() {
+	public Cards() {}
+
+	public Cards(Cards removedCard) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -36,11 +38,8 @@ public class Cards {
 	}
 
 	public void addToDeck () {
-		for (int i = 1; i<=10;i++) {
-			for (int j = 1; j<=4;j++) {
-				deckOfCards.add(new Cards(i, j));
-				}
-			}
+		IntStream.rangeClosed(1, 10).forEach(i -> {IntStream.rangeClosed(1, 4)
+			.forEach(j -> {deckOfCards.add(new Cards(i, j));});});
 	}
 	
 	@Override
@@ -75,13 +74,13 @@ public class Cards {
 		}
 	
 	public void giveCards(List<Cards> hand) {
-		Random rand = new Random();
-		int randomIndex = rand.nextInt(deckOfCards.size() - 1);
-	
 		for (int i = 0; i<3; i++) {
-			Cards removedCard = deckOfCards.remove(randomIndex);
+			Cards removedCard = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
 			hand.add(removedCard);
 		}
+	}
+	public Cards giveTheTurn(Cards turn) {
+        return turn = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
 
 	}
 }
