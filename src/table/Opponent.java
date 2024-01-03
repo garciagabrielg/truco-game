@@ -8,12 +8,13 @@ import truco.Cards;
 public class Opponent{
 	
 	private int opponentGamePoints;
+	private int opponentRoundPoints;
 	List<Cards> opponentHand = new ArrayList<>();
 	public Cards opponentCarddOnTheTable = new Cards();
 	
 	
-	public void receiveCard(Cards card) {
-		opponentHand.add(card);
+	public int getOpponentRoundPoints() {
+		return opponentRoundPoints;
 	}
 	
 	public List<Cards> getHand(){
@@ -22,11 +23,7 @@ public class Opponent{
 	
 	public Cards opponentPlayedCard() {
 		return opponentCarddOnTheTable = opponentHand.remove((int) (Math.random() * opponentHand.size()));	
-	}
-	
-	public void increaseOpponentGamePoints() {
-		opponentGamePoints++;
-	}
+	}	
 
 	public int getOpponentGamePoints() {
 		return opponentGamePoints;
@@ -36,6 +33,16 @@ public class Opponent{
 		return opponentCarddOnTheTable;
 	}
 	
+	public void receiveCard(Cards card) {
+		opponentHand.add(card);
+	}
+	
+	public void increaseOpponentGamePoints() {
+		opponentGamePoints++;
+	}
+	public void increaseOppRoundPoints() {
+		opponentRoundPoints++;
+	}
 	
 
 }

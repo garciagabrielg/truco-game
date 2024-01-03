@@ -8,26 +8,22 @@ import truco.Cards;
 public class Player {
 
 	private String name;
-	private int playerGamePoints = 0;
+	private int playerGamePoints;
+	private int playerRoundPoints;
 	
 	List<Cards> playerHand = new ArrayList<>();
 	public Cards playerCardOnTheTable = new Cards();
-	
-	public void receiveCard(Cards card) {
-		playerHand.add(card);
-	}
-	
+
 	public List<Cards> getHand(){
 		return playerHand;
-	}
-	
-	public Cards playedCard(Cards card) {
-		playerHand.remove(card);
-		return playerCardOnTheTable = card;		
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public int getPlayerRoundPoints() {
+		return playerRoundPoints;
 	}
 
 	public void setName(String name) {
@@ -38,7 +34,21 @@ public class Player {
 		return playerGamePoints;
 	}
 	
+	public Cards playedCard(Cards card) {
+		playerHand.remove(card);
+		return playerCardOnTheTable = card;		
+	}
+	
+	public void receiveCard(Cards card) {
+		playerHand.add(card);
+	}
+	
 	public void increasePoints() {
 		playerGamePoints++;
 	}
+	
+	public void increaseRoundPoints() {
+		playerRoundPoints++;
+	}
+	
 }

@@ -9,9 +9,10 @@ public class Cards {
 	
 	private Integer faceValue;
 	private Integer shape;
+	private Cards theTurn;
 	List<Cards> deckOfCards = new ArrayList<>();
 	
-	public Cards(Integer faceValue, int shape) {
+	public Cards(int faceValue, int shape) {
 		if (faceValue < 1 || faceValue > 10 || shape < 1 || shape > 4 ) {
 			throw new IllegalArgumentException("Invalid face value or shape for a standard deck card: " + faceValue + ", " + shape);
 		}
@@ -19,10 +20,7 @@ public class Cards {
 		this.shape = shape;
 	}
 
-	public Cards() {}
-
-	public Cards(Cards removedCard) {
-		// TODO Auto-generated constructor stub
+	public Cards() {
 	}
 
 	public Integer getFaceValue() {
@@ -33,6 +31,14 @@ public class Cards {
 		return shape;
 	}
 	
+	public Cards getTheTurn() {
+		return theTurn;
+	}
+
+	public void setFaceValue(Integer faceValue) {
+		this.faceValue = faceValue;
+	}
+
 	public List<Cards> getDeckOfCards() {
 		return deckOfCards;
 	}
@@ -79,8 +85,12 @@ public class Cards {
 			hand.add(removedCard);
 		}
 	}
-	public Cards giveTheTurn(Cards turn) {
-        return turn = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
-
+	public void giveTheTurn() {
+       theTurn = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
 	}
+
+	public void initialSetup() {
+		addToDeck();
+		giveTheTurn();
+	} 
 }
