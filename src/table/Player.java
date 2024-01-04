@@ -10,12 +10,11 @@ public class Player {
 	private String name;
 	private int playerGamePoints;
 	private int playerRoundPoints;
-	
-	List<Cards> playerHand = new ArrayList<>();
-	public Cards playerCardOnTheTable = new Cards();
+	private List<Cards> playerHand = new ArrayList<>();
+	private Cards playerCardOnTheTable;
 
-	public List<Cards> getHand(){
-		return playerHand;
+	public List<Cards> getHand() {
+	    return playerHand;
 	}
 
 	public String getName() {
@@ -26,15 +25,19 @@ public class Player {
 		return playerRoundPoints;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Cards getPlayerCardOnTheTable() {
+		return playerCardOnTheTable;
 	}
 
 	public int getPlayerGamePoints() {
 		return playerGamePoints;
 	}
 	
-	public Cards playedCard(Cards card) {
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Cards playCard(Cards card) {
 		playerHand.remove(card);
 		return playerCardOnTheTable = card;		
 	}

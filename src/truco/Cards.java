@@ -5,12 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import table.Opponent;
+import table.Player;
+
 public class Cards {
 	
 	private Integer faceValue;
 	private Integer shape;
 	private Cards theTurn;
-	List<Cards> deckOfCards = new ArrayList<>();
+	private Player player;
+	private Opponent opponent;
+	private List<Cards> deckOfCards = new ArrayList<>();
 	
 	public Cards(int faceValue, int shape) {
 		if (faceValue < 1 || faceValue > 10 || shape < 1 || shape > 4 ) {
@@ -21,6 +26,7 @@ public class Cards {
 	}
 
 	public Cards() {
+
 	}
 
 	public Integer getFaceValue() {
@@ -35,17 +41,28 @@ public class Cards {
 		return theTurn;
 	}
 
-	public void setFaceValue(Integer faceValue) {
-		this.faceValue = faceValue;
+	public void setFaceValue(Integer integer) {
+		this.faceValue = integer;
 	}
 
 	public List<Cards> getDeckOfCards() {
 		return deckOfCards;
 	}
 
-	public void addToDeck () {
-		IntStream.rangeClosed(1, 10).forEach(i -> {IntStream.rangeClosed(1, 4)
-			.forEach(j -> {deckOfCards.add(new Cards(i, j));});});
+	public Player getPlayer() {
+		return player;
+	}
+
+	public Opponent getOpponent() {
+		return opponent;
+	}
+
+	public void addToDeck() {
+		IntStream.rangeClosed(1, 10).forEach(i -> {
+			IntStream.rangeClosed(1, 4).forEach(j -> {
+				deckOfCards.add(new Cards(i, j));
+			});
+		});
 	}
 	
 	@Override
@@ -56,7 +73,7 @@ public class Cards {
 	}
 	
 	private String getFaceName() {
-		switch(faceValue) {
+		switch (faceValue) {
 		case 1: return "Ace";
 		case 8: return "Jack";
 		case 9: return "Queen";
@@ -66,7 +83,7 @@ public class Cards {
 	}
 	
 	private String getShapeName() {
-		switch(shape) {
+		switch (shape) {
 		case 1: return "Clubs";
 		case 2: return "Hearts";
 		case 3: return "Spades";
@@ -76,21 +93,25 @@ public class Cards {
 	}
 	
 	public void shuffleCards() {
-			Collections.shuffle(deckOfCards);
-		}
+		Collections.shuffle(deckOfCards);
+	}
 	
 	public void giveCards(List<Cards> hand) {
-		for (int i = 0; i<3; i++) {
+		for (int i = 0; i < 3; i++) {
 			Cards removedCard = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
 			hand.add(removedCard);
 		}
 	}
-	public void giveTheTurn() {
-       theTurn = deckOfCards.remove((int) (Math.random() * deckOfCards.size()));
+	
+	public Cards giveTheTurn() {
+		if (!deckOfCards.isEmpty()) {
+			int randomIndex = (int) (Math.random() * deckOfCards.size());
+			theTurn = deckOfCards.remove(randomIndex);
+		} else {
+			throw new TrucoException("error buddy, sorry ");
+		}
+		return theTurn;
 	}
 
-	public void initialSetup() {
-		addToDeck();
-		giveTheTurn();
-	} 
+
 }

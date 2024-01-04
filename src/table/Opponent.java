@@ -9,8 +9,8 @@ public class Opponent{
 	
 	private int opponentGamePoints;
 	private int opponentRoundPoints;
-	List<Cards> opponentHand = new ArrayList<>();
-	public Cards opponentCarddOnTheTable = new Cards();
+	private List<Cards> opponentHand = new ArrayList<>();
+	private Cards opponentCardOnTheTable;
 	
 	
 	public int getOpponentRoundPoints() {
@@ -18,21 +18,22 @@ public class Opponent{
 	}
 	
 	public List<Cards> getHand(){
-		return opponentHand;
+	    return opponentHand;
+
+	}
+
+	public Cards getOpponentCardOnTheTable() {
+		return opponentCardOnTheTable;
 	}
 	
 	public Cards opponentPlayedCard() {
-		return opponentCarddOnTheTable = opponentHand.remove((int) (Math.random() * opponentHand.size()));	
+		return opponentCardOnTheTable = opponentHand.remove((int) (Math.random() * opponentHand.size()));	
 	}	
 
 	public int getOpponentGamePoints() {
 		return opponentGamePoints;
 	}
 
-	public Cards getOpponentCarddOnTheTable() {
-		return opponentCarddOnTheTable;
-	}
-	
 	public void receiveCard(Cards card) {
 		opponentHand.add(card);
 	}
@@ -43,6 +44,6 @@ public class Opponent{
 	public void increaseOppRoundPoints() {
 		opponentRoundPoints++;
 	}
-	
+
 
 }

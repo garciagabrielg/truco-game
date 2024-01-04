@@ -2,9 +2,8 @@ package application;
 
 import java.util.Scanner;
 
-import table.Opponent;
-import table.Player;
 import truco.Cards;
+import truco.TrucoException;
 import truco.TrucoMatch;
 
 public class Program {
@@ -12,16 +11,19 @@ public class Program {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-
+	
 		Cards cards = new Cards();
 		TrucoMatch truco = new TrucoMatch();
 
 		while(!truco.isTheGameFinished()) {
+			try {
+			truco.initialSetup();
+			truco.theTurnCard();
+			for (Cards x : cards.getDeckOfCards())
+				System.out.println(x);
 			
-			cards.initialSetup();
-			cards.giveTheTurn();
-			
-			System.out.println(cards.getDeckOfCards().size());
+			System.out.println();
+			System.out.println(truco.getTheTurn());
 			
 			
 			System.out.println();
@@ -32,26 +34,28 @@ public class Program {
 			}
 			System.out.println();
 			System.out.println("play a card ");
-			/*Cards playerCard = player.playedCard(player.getHand().get(sc.nextInt()));
-			Cards oppCard = opponent.opponentPlayedCard();
+			Cards playerCard = truco.getPlayer().playCard(truco.getPlayer().getHand().get(sc.nextInt()));
+			System.out.println();
 			
 			
 			
-			System.out.println(player.playedCard(playerCard));
-			System.out.println(opponent.opponentPlayedCard());*/
-			
-			truco.upateGamePoints();
+			System.out.println("Player card: " + truco.getPlayer().playCard(playerCard));
+			System.out.println("Opponent card: " + truco.getOpponent().opponentPlayedCard());
+			truco.updateGamePoints();
 			
 			System.out.println("Player points: " + truco.getPlayer().getPlayerGamePoints());
 			System.out.println("Opponent points: " + truco.getOpponent().getOpponentGamePoints());
 				
 			
-			System.out.println(cards.getDeckOfCards().size());
+			System.out.println(truco.getCards().getDeckOfCards().size());
+			System.out.println();
+			}
+			catch(TrucoException e) {
+				System.out.println(e.getMessage());
+			}
 
 		}
 			
-		
-		System.out.println(cards.getDeckOfCards().size());
 		
 		sc.close();
 	}
