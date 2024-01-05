@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import truco.Cards;
+import truco.TrucoException;
 
 public class Opponent{
 	
@@ -31,9 +32,12 @@ public class Opponent{
 	}
 	
 	public Cards opponentPlayedCard() {
-		return opponentCardOnTheTable = opponentHand.remove((int) (Math.random() * opponentHand.size()));	
+		if(!getHand().isEmpty()) {
+			return opponentCardOnTheTable = opponentHand.remove((int) (Math.random() * opponentHand.size()));
+		}
+		else throw new TrucoException ("no cards in the hand ");
 	}	
-
+	
 	public int getOpponentGamePoints() {
 		return opponentGamePoints;
 	}
@@ -52,6 +56,4 @@ public class Opponent{
 	public void resetGamePoints() {
 		opponentGamePoints = 0;
 	}
-
-
 }

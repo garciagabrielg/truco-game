@@ -2,7 +2,9 @@ package truco;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import table.Opponent;
@@ -25,9 +27,7 @@ public class Cards {
 		this.shape = shape;
 	}
 
-	public Cards() {
-
-	}
+	public Cards() {}
 
 	public Integer getFaceValue() {
 		return faceValue;
@@ -58,9 +58,15 @@ public class Cards {
 	}
 
 	public void addToDeck() {
+	    Set<String> addedCards = new HashSet<>();
+
 		IntStream.rangeClosed(1, 10).forEach(i -> {
 			IntStream.rangeClosed(1, 4).forEach(j -> {
-				deckOfCards.add(new Cards(i, j));
+				String cardIdentity = i + "_" + j;
+	            if (!addedCards.contains(cardIdentity)) {
+	                deckOfCards.add(new Cards(i, j));
+	                addedCards.add(cardIdentity);
+	            }
 			});
 		});
 	}
@@ -108,6 +114,4 @@ public class Cards {
 			theTurn = deckOfCards.remove(randomIndex);
 		return theTurn;
 	}
-
-
 }

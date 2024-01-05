@@ -61,5 +61,4 @@ public class Player {
 	public void increaseRoundPoints() {
 		playerRoundPoints++;
 	}
-	
 }
