@@ -104,12 +104,8 @@ public class Cards {
 	}
 	
 	public Cards giveTheTurn() {
-		if (!deckOfCards.isEmpty()) {
 			int randomIndex = (int) (Math.random() * deckOfCards.size());
 			theTurn = deckOfCards.remove(randomIndex);
-		} else {
-			throw new TrucoException("error buddy, sorry ");
-		}
 		return theTurn;
 	}
 

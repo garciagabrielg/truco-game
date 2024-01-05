@@ -12,6 +12,10 @@ public class Opponent{
 	private List<Cards> opponentHand = new ArrayList<>();
 	private Cards opponentCardOnTheTable;
 	
+	public Opponent() {
+		opponentGamePoints = 0;
+		opponentRoundPoints = 0;
+	}
 	
 	public int getOpponentRoundPoints() {
 		return opponentRoundPoints;
@@ -41,8 +45,12 @@ public class Opponent{
 	public void increaseOpponentGamePoints() {
 		opponentGamePoints++;
 	}
-	public void increaseOppRoundPoints() {
+	public void increaseOpponentRoundPoints() {
 		opponentRoundPoints++;
+	}
+	
+	public void resetGamePoints() {
+		opponentGamePoints = 0;
 	}
 
 

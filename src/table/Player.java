@@ -13,6 +13,11 @@ public class Player {
 	private List<Cards> playerHand = new ArrayList<>();
 	private Cards playerCardOnTheTable;
 
+	public Player() {
+		playerGamePoints = 0;
+		playerRoundPoints = 0;
+	}
+
 	public List<Cards> getHand() {
 	    return playerHand;
 	}
@@ -48,6 +53,9 @@ public class Player {
 	
 	public void increasePoints() {
 		playerGamePoints++;
+	}
+	public void resetGamePoints() {
+		playerGamePoints = 0;
 	}
 	
 	public void increaseRoundPoints() {

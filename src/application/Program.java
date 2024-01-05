@@ -42,9 +42,10 @@ public class Program {
 			System.out.println("Player card: " + truco.getPlayer().playCard(playerCard));
 			System.out.println("Opponent card: " + truco.getOpponent().opponentPlayedCard());
 			truco.updateGamePoints();
+			System.out.println(truco.getGamePoints());
 			
-			System.out.println("Player points: " + truco.getPlayer().getPlayerGamePoints());
-			System.out.println("Opponent points: " + truco.getOpponent().getOpponentGamePoints());
+			System.out.println("Player points: " + truco.getPlayer().getPlayerGamePoints() + " " + truco.getPlayer().getPlayerRoundPoints());
+			System.out.println("Opponent points: " + truco.getOpponent().getOpponentGamePoints() + " " + truco.getOpponent().getOpponentRoundPoints());
 				
 			
 			System.out.println(truco.getCards().getDeckOfCards().size());
