@@ -1,5 +1,6 @@
 package truco;
 
+import java.util.Random;
 import java.util.Scanner;
 
 import table.Opponent;
@@ -8,7 +9,6 @@ import table.Player;
 public class TrucoMatch {
 	private int gamePoints = 0;
 	private int roundsPoints = 0;
-	private int gameTurn = 0;
 	private int roundTurn = 0;
 	private Cards cards;
 	private Cards manille;
@@ -16,9 +16,9 @@ public class TrucoMatch {
 	private Player player;
 	private Opponent opponent;
 	private boolean playerWonLastRound = false;
-	private boolean opponentWonLastRound = false;
-	private boolean playerTurn = false;
 	private boolean opponentTurn = false;
+	boolean opponentHasPlayed = false;
+	boolean playerHasPlayed = false;
 
 	public TrucoMatch() {
 		player = new Player();
@@ -36,10 +36,6 @@ public class TrucoMatch {
 
 	public int getRoundsPoints() {
 		return roundsPoints;
-	}
-
-	public int getGameTurn() {
-		return gameTurn;
 	}
 
 	public int getRoundTurn() {
@@ -125,42 +121,15 @@ public class TrucoMatch {
 		return card1 != null && card2 != null && card1.getFaceValue() == card2.getFaceValue();
 	}
 
-	public void updateGamePoints() {
+	public void handleCardsOnTheTable() {
 		Cards manille = isManille();
-		if (gamePoints == 3) {
-			resetGame();
-		}
 		if (manille != null) {
 			handleManilleScenario(manille);
 		} else {
 			handleNormalScenario();
 		}
-	}
-
-	public void updateRoundPoints() {
-		if (player.getPlayerGamePoints() > 1) {
-			player.increaseRoundPoints();
-			playerWonLastRound = true;
-		} else if (opponent.getOpponentGamePoints() == 2) {
-			opponent.increaseOpponentRoundPoints();
-			opponentWonLastRound = true;
-		}
-	}
-
-	private void resetGame() {
-		updateRoundPoints();
-		gamePoints = 0;
-		gameTurn = 0;
-		player.resetGamePoints();
-		opponent.resetGamePoints();
-		roundsPoints++;
-		roundTurn++;
-		//
-		cards.getDeckOfCards().clear();
-		theTurn = null;
-		if (!player.getHand().isEmpty() && !opponent.getHand().isEmpty()) {
-			player.getHand().clear();
-			opponent.getHand().clear();
+		if (player.getPlayerCardOnTheTable() == null || opponent.getOpponentCardOnTheTable() == null) {
+			throw new TrucoException("Error ");
 		}
 	}
 
@@ -170,16 +139,28 @@ public class TrucoMatch {
 			handleTieBreakerScenario();
 		} else if (player.getPlayerCardOnTheTable() == manilleCard) {
 			player.increasePoints();
+			gamePoints++;
+			playerWonLastRound = true;
+
 		} else {
 			opponent.increaseOpponentGamePoints();
+			gamePoints++;
+			playerWonLastRound = false;
+
 		}
 	}
 
 	private void handleTieBreakerScenario() {
 		if (player.getPlayerCardOnTheTable().getShape() < opponent.getOpponentCardOnTheTable().getShape()) {
 			player.increasePoints();
+			gamePoints++;
+			playerWonLastRound = true;
+
 		} else {
 			opponent.increaseOpponentGamePoints();
+			gamePoints++;
+			playerWonLastRound = false;
+
 		}
 	}
 
@@ -189,8 +170,38 @@ public class TrucoMatch {
 		} else if (player.getPlayerCardOnTheTable().getFaceValue() > opponent.getOpponentCardOnTheTable()
 				.getFaceValue()) {
 			player.increasePoints();
+			gamePoints++;
+			playerWonLastRound = true;
+
 		} else {
 			opponent.increaseOpponentGamePoints();
+			gamePoints++;
+			playerWonLastRound = false;
+
+		}
+	}
+// melhorar isso aqui
+	public void updateRoundPoints() {
+		if (player.getPlayerGamePoints() > 1) {
+			player.increaseRoundPoints();
+			playerWonLastRound = true;
+		} else if (opponent.getOpponentGamePoints() > 1) {
+			opponent.increaseOpponentRoundPoints();
+			playerWonLastRound = false;
+		}
+	}
+
+	private void resetGame() {
+		gamePoints = 0;
+		player.resetGamePoints();
+		opponent.resetGamePoints();
+		roundsPoints++;
+		roundTurn++;
+		cards.getDeckOfCards().clear();
+		theTurn = null;
+		if (!player.getHand().isEmpty() && !opponent.getHand().isEmpty()) {
+			player.getHand().clear();
+			opponent.getHand().clear();
 		}
 	}
 
@@ -204,6 +215,7 @@ public class TrucoMatch {
 	public void initialSetup() {
 		if (player.getPlayerGamePoints() > 1 || opponent.getOpponentGamePoints() > 1) {
 			resetGame();
+			updateRoundPoints();
 		}
 		if (cards.getDeckOfCards().isEmpty()) {
 			cards.addToDeck();
@@ -211,31 +223,62 @@ public class TrucoMatch {
 			cards.giveCards(player.getHand());
 			cards.giveCards(opponent.getHand());
 		}
-		if(player.getPlayerCardOnTheTable() != null && opponent.getOpponentCardOnTheTable() != null) {
-			updateGamePoints();
+	}
+
+	public boolean whoWonLastRound() {
+		if (playerWonLastRound) {
+			return opponentTurn = false;
+		} else {
+			return opponentTurn = true;
 		}
 	}
 
-	public boolean determineWhoGoesFirst() {
-		return playerWonLastRound;
+	public void randomStart() {
+		Random random = new Random();
+		opponentTurn = random.nextBoolean();
+		System.out.println(opponentTurn ? "Opponent goes first." : "You go first.");
 	}
 
 	public void playTurn() {
-		Scanner sc = new Scanner(System.in);
+
+		if (gamePoints >= 1) {
+			whoWonLastRound();
+
+		}
+		if (playerHasPlayed && !opponentHasPlayed) {
+			opponentTurn = true;
+		} else if (!playerHasPlayed && opponentHasPlayed) {
+			opponentTurn = false;
+		}
 		if (!opponentTurn) {
-	        System.out.println("Player's turn.");
-	        System.out.println("Player hand: " + player.getHand());
-	        Cards playedCard = player.playCard(player.getHand().get(sc.nextInt()));
-	        player.playCard(playedCard);
-	        System.out.println("Player played: " + playedCard);
-	        System.out.println();
-	        opponentTurn = true;
-	    } else {
-	        System.out.println("Opponent's turn.");
-	        Cards opponentPlayedCard = opponent.opponentPlayedCard();
-	        System.out.println("Opponent played: " + opponentPlayedCard);
-	        System.out.println();
-	        opponentTurn = false;
-	    }
+			play();
+			playerHasPlayed = true;
+		} else {
+			opponentPlay();
+			opponentHasPlayed = true;
+		}
+		if (playerHasPlayed == true && opponentHasPlayed == true) {
+			playerHasPlayed = false;
+			opponentHasPlayed = false;
+		}
+		//opponentTurn = !opponentTurn;
+	}
+
+	public void play() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Player's turn.");
+		System.out.println("Player hand: " + player.getHand());
+		System.out.println("Choose a card index to play:");
+		int cardIndex = sc.nextInt();
+		Cards playedCard = player.playCard(player.getHand().get(cardIndex));
+		System.out.println("Player played: " + playedCard);
+		System.out.println();
+	}
+
+	public void opponentPlay() {
+		System.out.println("Opponent's turn.");
+		Cards opponentPlayedCard = opponent.opponentPlayedCard();
+		System.out.println("Opponent played: " + opponentPlayedCard);
+		System.out.println();
 	}
 }
