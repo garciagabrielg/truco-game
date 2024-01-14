@@ -19,3 +19,9 @@ The rules are simple:
   - If they go and lose, the opposite party win 3 round point;
   - If they don't go, the opposite party win 1 points;
   - If they go and win, they win the game;
+
+##### Needs to implement
+- [ ] Opponent Logic;
+- [ ] 14 round points logic;
+- [ ] Web app.
+- [ ] Correct minor bugs;
